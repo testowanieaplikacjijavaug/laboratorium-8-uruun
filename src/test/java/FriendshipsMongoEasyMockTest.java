@@ -1,3 +1,4 @@
+import org.easymock.EasyMock;
 import org.easymock.EasyMockExtension;
 import org.easymock.Mock;
 import org.easymock.MockType;
@@ -9,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.easymock.EasyMock.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @ExtendWith(EasyMockExtension.class)
@@ -45,6 +47,38 @@ public class FriendshipsMongoEasyMockTest {
 		replay(friends);
 		replay(joe);
 		assertThat(friendships.getFriendsList("Joe")).hasSize(5).containsOnly("Karol","Dawid","Maciej","Tomek","Adam");
-	}
+    }
+
+    // Zadanie 2
+
+    @Test
+    public void test_areFriends() {
+        Person karol = createMock(Person.class);
+        expect(friends.findByName("Karol")).andReturn(karol);
+        expect(karol.getFriends()).andReturn(Collections.singletonList("Dawid"));
+        replay(friends);
+        replay(karol);
+        assertThat(friendships.areFriends("Karol", "Dawid")).isTrue();
+    }
+
+    @Test
+    public void test_addFriend() {
+        Person karol = createMock(Person.class);
+        expect(friends.findByName("Karol")).andReturn(karol);
+        karol.addFriend("Dawid");
+        EasyMock.expectLastCall();
+        expect(karol.getFriends()).andReturn(Arrays.asList(new String[]{"Dawid"}));
+        replay(friends);
+        replay(karol);
+        assertThat(friendships.getFriendsList("Karol")).containsOnly("Dawid");
+    }
+
+    @Test
+	public void test_getName(){
+		Person karol = createMock(Person.class);
+		expect(karol.getName()).andReturn("Karol");
+		replay(karol);
+		assertThat(karol.getName()).isEqualTo("Karol");
+    }
 
 }
