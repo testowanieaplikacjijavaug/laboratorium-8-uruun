@@ -74,6 +74,13 @@ public class FriendshipsMongoEasyMockTest {
     }
 
     @Test
+    public void test_getName_null(){
+        Person karol = createMock(Person.class);
+        karol.setName(null);
+        expectLastCall().andThrow(new NullPointerException());
+    }
+
+    @Test
 	public void test_getName(){
 		Person karol = createMock(Person.class);
 		expect(karol.getName()).andReturn("Karol");
@@ -81,4 +88,10 @@ public class FriendshipsMongoEasyMockTest {
 		assertThat(karol.getName()).isEqualTo("Karol");
     }
 
+    @Test
+    public void test_setName_empty_exception() {
+        Person karol = createMock(Person.class);
+        karol.setName("");
+        expectLastCall().andThrow(new IllegalArgumentException());
+    }
 }

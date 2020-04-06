@@ -26,4 +26,3 @@ jobs:
       run: ./gradlew build
     - name: Coverage Codecov
       uses: codecov/codecov-action@v1.0.6
-      run: bash <(curl -s https://codecov.io/bash)
